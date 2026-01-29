@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options Screening App - Interface Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f7fa;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .panel h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+        .search-box {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .chip {
+            background: #edf2f7;
+            padding: 0.5rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .chip button {
+            background: #cbd5e0;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .toggle-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .toggle-btn {
+            flex: 1;
+            padding: 0.875rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        .refresh-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        th {
+            padding: 1rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+        .recommended-row {
+            background: #f0fff4;
+        }
+        .recommended-row:hover {
+            background: #e6ffed;
+        }
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .badge.put {
+            background: #fee;
+            color: #c33;
+        }
+        .badge.call {
+            background: #e6f7ff;
+            color: #0050b3;
+        }
+        .badge.yes {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 0.4rem 0.875rem;
+            border-radius: 20px;
+        }
+        .badge.no {
+            background: #fed7d7;
+            color: #742a2a;
+            padding: 0.4rem 0.875rem;
+            border-radius: 20px;
+        }
+        .ev-highlight {
+            background: #fef5e7;
+            font-weight: 500;
+        }
+        .ev-percent-highlight {
+            background: #fff3cd;
+            font-weight: 700;
+            color: #856404;
+        }
+        .symbol-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .spot-price {
+            font-size: 0.8rem;
+            color: #718096;
+        }
+        .info-box {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .info-box h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        .info-box li {
+            padding: 0.25rem 0;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Options Screening App</h1>
+        <p>High Extrinsic Value Opportunities - NSE Market</p>
+    </div>
+
+    <div class="container">
+        <!-- Symbol Selector -->
+        <div class="panel">
+            <h2>Select Symbols (Max 50)</h2>
+            <input type="text" class="search-box" placeholder="🔍 Search stocks/indices..." value="Type to search...">
+            <div style="background: #edf2f7; padding: 0.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                <strong>Selected: 3 / 50</strong>
+            </div>
+            <div class="chips">
+                <div class="chip">NIFTY <button>×</button></div>
+                <div class="chip">RELIANCE <button>×</button></div>
+                <div class="chip">TCS <button>×</button></div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="panel">
+            <div class="controls">
+                <div>
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Strategy</label>
+                    <div class="toggle-group">
+                        <button class="toggle-btn active">🛡️ CCP (ITM PUT)</button>
+                        <button class="toggle-btn">📈 ACC (ITM CALL)</button>
+                    </div>
+                    <p style="margin-top: 0.5rem; color: #718096; font-size: 0.85rem;">Cash Covered Put - Sell ITM Puts</p>
+                </div> value="0">Current Month (0)</option>
+                        <option value="1">Next Month (+1)</option>
+                        <option value="2">+2 Months</option>
+                        <option value="3"le="width: 100%; padding: 0.875rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
+                        <option>Current Month (0)</option>
+                        <option>Next Month (+1)</option>
+                        <option>+2 Months</option>
+                        <option>+3 Months</option>
+                    </select>
+                    <p style="margin-top: 0.5rem; color: #718096; font-size: 0.85rem;">Monthly expiries only</p>
+                </div>
+                <div>
+                    <label style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Data</label>
+                    <button class="refresh-btn">🔄 Refresh Data</button>
+                    <p style="margin-top: 0.5rem; color: #718096; font-size: 0.85rem;">Last updated: 10:30:45</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Strategy Rules</h3>
+                <ul>
+                    <li><strong>Index (e.g., NIFTY):</strong> Recommend if EV% &gt; 1%</li>
+                    <li><strong>Stocks:</strong> Recommend if EV% &gt; 2%</li>
+                    <li><strong>Sorting:</strong> Results sorted by EV% (highest first)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0;">Screening Results</h2>
+                <div style="display: flex; gap: 0.75rem;">
+                    <span style="background: #edf2f7; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">Total: 3</span>
+                    <span style="background: #c6f6d5; color: #22543d; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">Recommended: 2</span>
+                </div>
+            </div>
+            <div style="overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol ⇅</th>
+                            <th>Option Type ⇅</th>
+                            <th>Strike Price ⇅</th>
+                            <th>Option LTP ⇅</th>
+                            <th>Intrinsic Value ⇅</th>
+                            <th>Extrinsic Value ⇅</th>
+                            <th style="background: rgba(255,255,255,0.15);">EV % ⇅</th>
+                            <th>Days to Expiry ⇅</th>
+                            <th>Recommendation ⇅</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="recommended-row">
+                            <td>
+                                <div class="symbol-cell">
+                                    <strong>RELIANCE</strong>
+                                    <span class="spot-price">₹2,424.70</span>
+                                </div>
+                            </td>
+                            <td><span class="badge put">PUT</span></td>
+                            <td style="text-align: right;">₹2,500.00</td>
+                            <td style="text-align: right;">₹85.50</td>
+                            <td class="ev-highlight" style="text-align: right;">₹50.30</td>
+                            <td class="ev-highlight" style="text-align: right;">₹35.20</td>
+                            <td class="ev-percent-highlight" style="text-align: right;"><strong>2.41%</strong></td>
+                            <td style="text-align: right;">12</td>
+                            <td><span class="badge yes">YES</span></td>
+                        </tr>
+                        <tr class="recommended-row">
+                            <td>
+                                <div class="symbol-cell">
+                                    <strong>TCS</strong>
+                                    <span class="spot-price">₹3,650.25</span>
+                                </div>
+                            </td>
+                            <td><span class="badge put">PUT</span></td>
+                            <td style="text-align: right;">₹3,600.00</td>
+                            <td style="text-align: right;">₹125.00</td>
+                            <td class="ev-highlight" style="text-align: right;">₹50.00</td>
+                            <td class="ev-highlight" style="text-align: right;">₹75.00</td>
+                            <td class="ev-percent-highlight" style="text-align: right;"><strong>2.08%</strong></td>
+                            <td style="text-align: right;">12</td>
+                            <td><span class="badge yes">YES</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="symbol-cell">
+                                    <strong>NIFTY</strong>
+                                    <span class="spot-price">₹21,530.45</span>
+                                </div>
+                            </td>
+                            <td><span class="badge put">PUT</span></td>
+                            <td style="text-align: right;">₹21,500.00</td>
+                            <td style="text-align: right;">₹82.30</td>
+                            <td class="ev-highlight" style="text-align: right;">₹30.20</td>
+                            <td class="ev-highlight" style="text-align: right;">₹52.10</td>
+                            <td class="ev-percent-highlight" style="text-align: right;"><strong>0.24%</strong></td>
+                            <td style="text-align: right;">12</td>
+                            <td><span class="badge no">NO</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 1rem; color: #718096; font-size: 0.85rem;">
+                <strong>Note:</strong> Results are sorted by EV% (highest first). Click column headers to sort by different criteria.
+            </p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Options Screening App | NSE Market Data</p>
+        <p style="opacity: 0.7; font-size: 0.8rem; margin-top: 0.5rem;">For educational purposes only. Not financial advice.</p>
+    </div>
+
+    <script>
+        // State management
+        let currentStrategy = 'CCP';
+        let currentExpiry = 0;
+        
+        // Sample data for different strategies
+        const ccpData = [
+            { symbol: 'RELIANCE', spot: 2424.70, type: 'PUT', strike: 2500, ltp: 85.50, iv: 50.30, ev: 35.20, evPercent: 2.41, days: 12, recommended: 'YES' },
+            { symbol: 'TCS', spot: 3650.25, type: 'PUT', strike: 3600, ltp: 125.00, iv: 50.00, ev: 75.00, evPercent: 2.08, days: 12, recommended: 'YES' },
+            { symbol: 'NIFTY', spot: 21530.45, type: 'PUT', strike: 21500, ltp: 82.30, iv: 30.20, ev: 52.10, evPercent: 0.24, days: 12, recommended: 'NO' }
+        ];
+        
+        const accData = [
+            { symbol: 'NIFTY', spot: 21530.45, type: 'CALL', strike: 21600, ltp: 95.30, iv: 45.20, ev: 50.10, evPercent: 1.23, days: 12, recommended: 'YES' },
+            { symbol: 'RELIANCE', spot: 2424.70, type: 'CALL', strike: 2400, ltp: 42.50, iv: 24.70, ev: 17.80, evPercent: 0.74, days: 12, recommended: 'NO' },
+            { symbol: 'TCS', spot: 3650.25, type: 'CALL', strike: 3700, ltp: 68.00, iv: 49.75, ev: 18.25, evPercent: 0.49, days: 12, recommended: 'NO' }
+        ];
+        
+        // Toggle strategy buttons
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (this.textContent.includes('CCP')) {
+                    currentStrategy = 'CCP';
+                    document.querySelector('.toggle-btn.active + p').textContent = 'Cash Covered Put - Sell ITM Puts';
+                } else {
+                    currentStrategy = 'ACC';
+                    document.querySelector('.toggle-btn:not(.active) + .toggle-btn + p').textContent = 'Asset Covered Call - Sell ITM Calls';
+                }
+                updateTable();
+            });
+        });
+        
+        // Expiry selection
+        document.querySelector('select').addEventListener('change', function() {
+            currentExpiry = parseInt(this.value) || 0;
+            updateTable();
+        });
+        
+        // Refresh button
+        document.querySelector('.refresh-btn').addEventListener('click', function() {
+            this.textContent = '⏳ Loading...';
+            setTimeout(() => {
+                this.textContent = '🔄 Refresh Data';
+                updateTable();
+                const now = new Date();
+                document.querySelector('.refresh-btn + p').textContent = 
+                    `Last updated: ${now.toLocaleTimeString()}`;
+            }, 1500);
+        });
+        
+        // Update table based on current strategy
+        function updateTable() {
+            const data = currentStrategy === 'CCP' ? ccpData : accData;
+            const tbody = document.querySelector('tbody');
+            
+            tbody.innerHTML = data.map(row => `
+                <tr class="${row.recommended === 'YES' ? 'recommended-row' : ''}">
+                    <td>
+                        <div class="symbol-cell">
+                            <strong>${row.symbol}</strong>
+                            <span class="spot-price">₹${row.spot.toFixed(2)}</span>
+                        </div>
+                    </td>
+                    <td><span class="badge ${row.type.toLowerCase()}">${row.type}</span></td>
+                    <td style="text-align: right;">₹${row.strike.toFixed(2)}</td>
+                    <td style="text-align: right;">₹${row.ltp.toFixed(2)}</td>
+                    <td class="ev-highlight" style="text-align: right;">₹${row.iv.toFixed(2)}</td>
+                    <td class="ev-highlight" style="text-align: right;">₹${row.ev.toFixed(2)}</td>
+                    <td class="ev-percent-highlight" style="text-align: right;"><strong>${row.evPercent.toFixed(2)}%</strong></td>
+                    <td style="text-align: right;">${row.days}</td>
+                    <td><span class="badge ${row.recommended.toLowerCase()}">${row.recommended}</span></td>
+                </tr>
+            `).join('');
+            
+            // Update counts
+            const recommendedCount = data.filter(r => r.recommended === 'YES').length;
+            document.querySelector('div[style*="gap: 0.75rem"] span:first-child').textContent = `Total: ${data.length}`;
+            document.querySelector('div[style*="gap: 0.75rem"] span:last-child').textContent = `Recommended: ${recommendedCount}`;
+        }
+    </script>
+</body>
+</html>
