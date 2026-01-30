@@ -1,6 +1,6 @@
 // api/screen.js
-import nseService from '../server/services/nseService';
-import optionsLogic from '../server/services/optionsLogic';
+import nseService from '../server/services/nseService.js';
+import optionsLogic from '../server/services/optionsLogic.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

@@ -144,7 +144,7 @@ async function fetchOptionChain(symbol) {
   return generateMockOptionChain(symbol, spotPrice);
 }
 
-module.exports = {
+export default {
   fetchSpotPrice,
   fetchOptionChain,
   isMockMode: true

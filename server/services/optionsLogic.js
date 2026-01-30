@@ -186,7 +186,7 @@ function analyzeOption(symbol, spotPrice, optionChain, expiryDate, strategy, day
   };
 }
 
-module.exports = {
+export default {
   calculateCallIV,
   calculatePutIV,
   calculateEV,

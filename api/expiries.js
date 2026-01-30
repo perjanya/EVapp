@@ -1,5 +1,5 @@
 // api/expiries.js
-import nseService from '../server/services/nseService';
+import nseService from '../server/services/nseService.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {

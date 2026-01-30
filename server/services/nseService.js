@@ -1,5 +1,5 @@
-const axios = require('axios');
-const mockDataService = require('./mockDataService');
+import axios from 'axios';
+import mockDataService from './mockDataService.js';
 
 /**
  * NSE Data Service
@@ -123,7 +123,7 @@ function calculateDaysToExpiry(expiryDate) {
   return diffDays > 0 ? diffDays : 0;
 }
 
-module.exports = {
+export default {
   fetchSpotPrice,
   fetchOptionChain,
   getMonthlyExpiries,
